@@ -1,4 +1,4 @@
-package com.example.mychef.domain.model
+package com.example.mychef.ui.model
 
 data class FeaturedListModel (
     val recepieName: String,

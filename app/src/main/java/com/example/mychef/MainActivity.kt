@@ -4,18 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -25,11 +19,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,9 +29,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.mychef.presentation.cart.CartScreen
-import com.example.mychef.presentation.favorites.FavoritesScreen
-import com.example.mychef.presentation.home.HomeScreen
+import com.example.mychef.ui.cart.CartScreen
+import com.example.mychef.ui.favorites.FavoritesScreen
+import com.example.mychef.ui.home.HomeScreen
+import com.example.mychef.ui.search.SearchScreen
 import com.example.mychef.ui.theme.MyChefTheme
 import com.example.mychef.utils.Constants
 
@@ -100,6 +93,11 @@ fun NavHostContainer(
                 FavoritesScreen()
             }
 
+            // route : search
+            composable("search") {
+                SearchScreen()
+            }
+
             // route : cart
             composable("cart") {
                 CartScreen()
@@ -156,6 +154,7 @@ fun TopAppBar(navController: NavHostController){
     val screenTitle = when (currentRoute) {
         "home" -> "Home"
         "favorites" -> "Favorites"
+        "search" -> "Search"
         "cart" -> "Cart"
         else -> ""
     }

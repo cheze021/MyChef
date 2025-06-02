@@ -1,4 +1,4 @@
-package com.example.mychef.domain.model
+package com.example.mychef.ui.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
