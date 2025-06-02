@@ -1,4 +1,4 @@
-package com.example.mychef.presentation.favorites
+package com.example.mychef.ui.cart
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,13 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun FavoritesScreen() {
+fun CartScreen() {
     Box(modifier = Modifier
         .fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
         Text(
-            text = "Favorites Screen",
+            text = "Cart Screen",
             style = MaterialTheme.typography.headlineLarge
         )
     }

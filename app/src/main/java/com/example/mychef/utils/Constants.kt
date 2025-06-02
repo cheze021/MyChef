@@ -2,7 +2,7 @@ package com.example.mychef.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import com.example.mychef.domain.model.BottomNavItem
+import com.example.mychef.ui.model.BottomNavItem
 
 object Constants {
     val BottomNavItems = listOf(
@@ -17,6 +17,12 @@ object Constants {
             label = "Favorites",
             icon = Icons.Filled.Favorite,
             route = "favorites"
+        ),
+        //Search screen
+        BottomNavItem(
+            label = "Search",
+            icon = Icons.Filled.Search,
+            route = "search"
         ),
         // Cart screen
         BottomNavItem(
