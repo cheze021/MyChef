@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mychef.R
+import com.example.mychef.model.CategoryProvider
 import com.example.mychef.ui.model.CategoriesListModel
 import com.example.mychef.ui.model.FeaturedListModel
 
@@ -88,11 +89,11 @@ fun FeaturedRecipes() {
                     modifier = Modifier
                         .width(215.dp)
                         .height(215.dp),
-                    shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = Color.Transparent
                     ),
-                    elevation = CardDefaults.cardElevation(6.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(0.dp)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize()
@@ -111,7 +112,8 @@ fun FeaturedRecipes() {
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -122,14 +124,7 @@ fun FeaturedRecipes() {
 
 @Composable
 fun CategoriesRecipes() {
-    val categories = listOf(
-        CategoriesListModel("Breakfast", R.drawable.breakfast_cat),
-        CategoriesListModel("Lunch", R.drawable.lunch_cat),
-        CategoriesListModel("Dinner", R.drawable.dinner_cat),
-        CategoriesListModel("Desserts", R.drawable.desserts_cat),
-        CategoriesListModel("Snacks", R.drawable.snack_cat),
-        CategoriesListModel("Drinks", R.drawable.drink_cat)
-    )
+    val categories = CategoryProvider.categories
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -164,8 +159,8 @@ fun CategoriesRecipes() {
                             .fillMaxSize()
                     ) {
                         Image(
-                            painter = painterResource(id = item.categoryImage),
-                            contentDescription = item.categoryName,
+                            painter = painterResource(id = item.iconRes),
+                            contentDescription = item.name,
                             modifier = Modifier
                                 .size(48.dp)
                                 .clip(RoundedCornerShape(12.dp)),
@@ -173,7 +168,7 @@ fun CategoriesRecipes() {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = item.categoryName,
+                            text = item.name,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
