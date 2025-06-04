@@ -9,7 +9,7 @@ import javax.inject.Inject
 class RecipeRepositoryImpl @Inject constructor(
     private val api: SpoonacularApi
 ) : RecipeRepository {
-    private val apiKey = "API_KEY"
+    private val apiKey = "08bbc388ffb545ca9fad3bd02115886d"
 
     override suspend fun fetchRecipes(): List<Recipe> {
 

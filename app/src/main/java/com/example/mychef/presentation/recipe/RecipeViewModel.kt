@@ -7,6 +7,7 @@ import com.example.mychef.domain.RecipeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +21,25 @@ class RecipeViewModel @Inject constructor(
 
     fun loadRecipeDetail(id: Int) {
         viewModelScope.launch {
-            val recipe = repository.getRecipeDetail(id)
-            _uiState.value = _uiState.value.copy(selectedRecipe = recipe)
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            try {
+                val recipe = repository.getRecipeDetail(id)
+                _uiState.update { it.copy(selectedRecipe = recipe, isLoading = false) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message, isLoading = false) }
+            }
+        }
+    }
+
+    fun loadRecipeByCategory(category: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            try {
+                val recipes = repository.getRecipesByCategory(category)
+                _uiState.update { it.copy(recipesByCategory = recipes, isLoading = false) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message, isLoading = false) }
+            }
         }
     }
 }

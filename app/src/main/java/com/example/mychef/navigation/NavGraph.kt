@@ -12,8 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.cart.CartScreen
+import com.example.mychef.ui.category_recipe.RecipeByCategoryScreen
 import com.example.mychef.ui.favorites.FavoritesScreen
-import com.example.mychef.ui.featured_detail.RecipeDetailScreen
 import com.example.mychef.ui.home.HomeScreen
 import com.example.mychef.ui.search.SearchScreen
 
@@ -37,7 +37,7 @@ fun NavGraph(
 
             // route : Home
             composable("home") {
-                HomeScreen()
+                HomeScreen(navController = navController)
             }
 
             // route : favorites
@@ -56,11 +56,11 @@ fun NavGraph(
             }
 
             composable(
-                "recipeDetail/{recipeId}",
-                arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+                "recipesByCategory/{category}",
+                arguments = listOf(navArgument("category") { type = NavType.StringType })
             ) { backStackEntry ->
-                val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
-                RecipeDetailScreen(recipeId, recipeViewModel)
+                val recipeId = backStackEntry.arguments?.getString("category") ?: ""
+                RecipeByCategoryScreen(recipeId, recipeViewModel)
             }
         })
 }

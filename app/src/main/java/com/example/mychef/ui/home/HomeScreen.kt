@@ -38,14 +38,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.mychef.R
 import com.example.mychef.model.CategoryProvider
 import com.example.mychef.ui.model.CategoriesListModel
 import com.example.mychef.ui.model.FeaturedListModel
+import com.example.mychef.utils.capitalizeWords
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +58,7 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        CategoriesRecipes()
+        CategoriesRecipes(navController)
     }
 }
 
@@ -123,15 +125,14 @@ fun FeaturedRecipes() {
 }
 
 @Composable
-fun CategoriesRecipes() {
+fun CategoriesRecipes(navController: NavController) {
     val categories = CategoryProvider.categories
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Categories",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
@@ -147,7 +148,9 @@ fun CategoriesRecipes() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(2.3f)
-                        .clickable { },
+                        .clickable {
+                            navController.navigate("recipesByCategory/${item.name}")
+                        },
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, Color(0xFFA18B85)),
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
@@ -168,7 +171,7 @@ fun CategoriesRecipes() {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = item.name,
+                            text = item.name.capitalizeWords(),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp
