@@ -7,9 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -47,6 +50,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyChefTheme {
                 val navController = rememberNavController()
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
@@ -115,12 +119,17 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun TopAppBar(navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+    val backArrowScreens = listOf("recipesByCategory/{category}")
+    val isBackArrowVisible = currentRoute in backArrowScreens
+    val arguments = navBackStackEntry?.arguments
+    val category = arguments?.getString("category")
 
     val screenTitle = when (currentRoute) {
         "home" -> "Home"
         "favorites" -> "Favorites"
         "search" -> "Search"
         "cart" -> "Cart"
+        "recipesByCategory/{category}" -> category?.replaceFirstChar { it.uppercase() } ?: "Category"
         else -> ""
     }
 
@@ -128,6 +137,13 @@ fun TopAppBar(navController: NavHostController){
         title = { Text(screenTitle, fontWeight = FontWeight.Bold) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color(0xFFFFF8F7)
-        )
+        ),
+        navigationIcon = {
+            if (isBackArrowVisible) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                }
+            }
+        }
     )
 }

@@ -59,8 +59,8 @@ fun NavGraph(
                 "recipesByCategory/{category}",
                 arguments = listOf(navArgument("category") { type = NavType.StringType })
             ) { backStackEntry ->
-                val recipeId = backStackEntry.arguments?.getString("category") ?: ""
-                RecipeByCategoryScreen(recipeId, recipeViewModel)
+                val recipeByCat = backStackEntry.arguments?.getString("category") ?: ""
+                RecipeByCategoryScreen(recipeByCat, recipeViewModel)
             }
         })
 }
