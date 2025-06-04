@@ -6,6 +6,5 @@ data class Recipe(
     val imageUrl: String,
     val readyInMinutes: Int,
     val servings: Int,
-    val sourceUrl: String,
     val ingredients: List<Ingredient> = emptyList()
 )

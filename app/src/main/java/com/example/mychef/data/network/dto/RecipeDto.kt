@@ -8,7 +8,6 @@ data class RecipeDto(
     val image: String?,
     val readyInMinutes: Int?,
     val servings: Int?,
-    val sourceUrl: String?
 ) {
     fun toDomain() = Recipe(
         id = id,
@@ -16,6 +15,5 @@ data class RecipeDto(
         imageUrl = image ?: "",
         readyInMinutes = readyInMinutes ?: 0,
         servings = servings ?: 0,
-        sourceUrl = sourceUrl ?: ""
     )
 }

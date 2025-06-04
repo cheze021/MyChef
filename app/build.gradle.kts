@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.squareup.sqldelight") version "1.5.5"
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -78,6 +80,11 @@ dependencies {
 
     // Coil para imágenes
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.56.2")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
 }
 
 sqldelight {
