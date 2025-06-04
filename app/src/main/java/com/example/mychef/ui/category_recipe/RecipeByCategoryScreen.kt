@@ -1,5 +1,6 @@
 package com.example.mychef.ui.category_recipe
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -56,7 +57,6 @@ fun RecipeByCategoryScreen(
                         Spacer(Modifier.height(8.dp))
                         AsyncImage(model = recipe.imageUrl, contentDescription = null)
                         Spacer(Modifier.height(8.dp))
-                        Text(text = "Ingredients: " + recipe.ingredients.toString(), fontWeight = FontWeight.Bold)
                         recipe.ingredients.forEach { Text("• $it") }
                         Spacer(Modifier.height(8.dp))
                     }
