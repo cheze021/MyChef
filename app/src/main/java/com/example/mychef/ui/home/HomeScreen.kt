@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.mychef.R
 import com.example.mychef.model.CategoryProvider
+import com.example.mychef.model.FeaturedProvider
 import com.example.mychef.ui.model.CategoriesListModel
 import com.example.mychef.ui.model.FeaturedListModel
 import com.example.mychef.utils.capitalizeWords
@@ -56,7 +57,7 @@ fun HomeScreen(navController: NavController) {
     ) {
         FeaturedRecipes()
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         CategoriesRecipes(navController)
     }
@@ -65,12 +66,7 @@ fun HomeScreen(navController: NavController) {
 
 @Composable
 fun FeaturedRecipes() {
-    val featuredRecipes = listOf(
-        FeaturedListModel("Delicious Recipes", R.drawable.delicous_recipes),
-        FeaturedListModel("Healthy Recipes", R.drawable.healthy_recipes),
-        FeaturedListModel("Five Minutes Recipes", R.drawable.five_minute_recipes),
-        FeaturedListModel("Breakfast Recipes", R.drawable.breakfast_recipes)
-    )
+    val featuredRecipes = FeaturedProvider.featuredRecipes
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
