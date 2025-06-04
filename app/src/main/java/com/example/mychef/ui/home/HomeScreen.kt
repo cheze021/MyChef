@@ -38,13 +38,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.mychef.R
+import com.example.mychef.model.CategoryProvider
 import com.example.mychef.ui.model.CategoriesListModel
 import com.example.mychef.ui.model.FeaturedListModel
+import com.example.mychef.utils.capitalizeWords
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +58,7 @@ fun HomeScreen() {
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        CategoriesRecipes()
+        CategoriesRecipes(navController)
     }
 }
 
@@ -88,11 +91,11 @@ fun FeaturedRecipes() {
                     modifier = Modifier
                         .width(215.dp)
                         .height(215.dp),
-                    shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color.White
+                        containerColor = Color.Transparent
                     ),
-                    elevation = CardDefaults.cardElevation(6.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.cardElevation(0.dp)
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize()
@@ -111,7 +114,8 @@ fun FeaturedRecipes() {
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             style = MaterialTheme.typography.bodyMedium,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Start,
+                            fontWeight = FontWeight.Bold
                         )
                     }
                 }
@@ -121,22 +125,14 @@ fun FeaturedRecipes() {
 }
 
 @Composable
-fun CategoriesRecipes() {
-    val categories = listOf(
-        CategoriesListModel("Breakfast", R.drawable.breakfast_cat),
-        CategoriesListModel("Lunch", R.drawable.lunch_cat),
-        CategoriesListModel("Dinner", R.drawable.dinner_cat),
-        CategoriesListModel("Desserts", R.drawable.desserts_cat),
-        CategoriesListModel("Snacks", R.drawable.snack_cat),
-        CategoriesListModel("Drinks", R.drawable.drink_cat)
-    )
+fun CategoriesRecipes(navController: NavController) {
+    val categories = CategoryProvider.categories
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Categories",
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
@@ -152,7 +148,9 @@ fun CategoriesRecipes() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(2.3f)
-                        .clickable { },
+                        .clickable {
+                            navController.navigate("recipesByCategory/${item.name}")
+                        },
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, Color(0xFFA18B85)),
                     colors = CardDefaults.cardColors(containerColor = Color.Transparent)
@@ -164,8 +162,8 @@ fun CategoriesRecipes() {
                             .fillMaxSize()
                     ) {
                         Image(
-                            painter = painterResource(id = item.categoryImage),
-                            contentDescription = item.categoryName,
+                            painter = painterResource(id = item.iconRes),
+                            contentDescription = item.name,
                             modifier = Modifier
                                 .size(48.dp)
                                 .clip(RoundedCornerShape(12.dp)),
@@ -173,7 +171,7 @@ fun CategoriesRecipes() {
                         )
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
-                            text = item.categoryName,
+                            text = item.name.capitalizeWords(),
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp

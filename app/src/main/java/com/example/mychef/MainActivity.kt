@@ -29,13 +29,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mychef.navigation.NavGraph
 import com.example.mychef.ui.cart.CartScreen
 import com.example.mychef.ui.favorites.FavoritesScreen
 import com.example.mychef.ui.home.HomeScreen
 import com.example.mychef.ui.search.SearchScreen
 import com.example.mychef.ui.theme.MyChefTheme
 import com.example.mychef.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,52 +61,13 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(navController = navController)
                         }, content = { padding ->
                             // Nav host: where screens are placed
-                            NavHostContainer(navController = navController, padding = padding)
+                            NavGraph(navController = navController, padding = padding)
                         }
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-fun NavHostContainer(
-    navController: NavHostController,
-    padding: PaddingValues
-) {
-
-    NavHost(
-        navController = navController,
-
-        // set the start destination as home
-        startDestination = "home",
-
-        // Set the padding provided by scaffold
-        modifier = Modifier.padding(paddingValues = padding),
-
-        builder = {
-
-            // route : Home
-            composable("home") {
-                HomeScreen()
-            }
-
-            // route : favorites
-            composable("favorites") {
-                FavoritesScreen()
-            }
-
-            // route : search
-            composable("search") {
-                SearchScreen()
-            }
-
-            // route : cart
-            composable("cart") {
-                CartScreen()
-            }
-        })
 }
 
 @Composable

@@ -31,4 +31,6 @@ object Constants {
             route = "cart"
         )
     )
+
+    const val BASE_URL = "https://api.spoonacular.com/"
 }
