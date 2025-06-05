@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ import com.example.mychef.model.CategoryProvider
 import com.example.mychef.model.FeaturedProvider
 import com.example.mychef.ui.model.CategoriesListModel
 import com.example.mychef.ui.model.FeaturedListModel
+import com.example.mychef.ui.theme.quickSandFamily
 import com.example.mychef.utils.capitalizeWords
 
 
@@ -71,6 +73,7 @@ fun FeaturedRecipes() {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Featured",
+            fontFamily = quickSandFamily,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -106,6 +109,7 @@ fun FeaturedRecipes() {
                         )
                         Text(
                             text = item.recepieName,
+                            fontFamily = quickSandFamily,
                             modifier = Modifier
                                 .padding(8.dp)
                                 .fillMaxWidth(),
@@ -127,6 +131,7 @@ fun CategoriesRecipes(navController: NavController) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Categories",
+            fontFamily = quickSandFamily,
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             fontSize = 22.sp,
@@ -168,6 +173,7 @@ fun CategoriesRecipes(navController: NavController) {
                         Spacer(modifier = Modifier.width(12.dp))
                         Text(
                             text = item.name.capitalizeWords(),
+                            fontFamily = quickSandFamily,
                             style = MaterialTheme.typography.bodyLarge,
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp

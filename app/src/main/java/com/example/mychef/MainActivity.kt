@@ -4,9 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -28,19 +26,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mychef.navigation.NavGraph
-import com.example.mychef.ui.cart.CartScreen
-import com.example.mychef.ui.favorites.FavoritesScreen
-import com.example.mychef.ui.home.HomeScreen
-import com.example.mychef.ui.search.SearchScreen
 import com.example.mychef.ui.theme.MyChefTheme
+import com.example.mychef.ui.theme.quickSandFamily
 import com.example.mychef.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -98,6 +90,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                 label = {
                     Text(
                         text = navItem.label,
+                        fontFamily = quickSandFamily,
                         fontSize = 12.sp
                     )
                 },
@@ -119,7 +112,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun TopAppBar(navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val backArrowScreens = listOf("recipesByCategory/{category}")
+    val backArrowScreens = listOf("recipesByCategory/{category}", "recipeDetail")
     val isBackArrowVisible = currentRoute in backArrowScreens
     val arguments = navBackStackEntry?.arguments
     val category = arguments?.getString("category")
@@ -134,7 +127,11 @@ fun TopAppBar(navController: NavHostController){
     }
 
     CenterAlignedTopAppBar(
-        title = { Text(screenTitle, fontWeight = FontWeight.Bold) },
+        title = { Text(
+            screenTitle,
+            fontWeight = FontWeight.Bold,
+            fontFamily = quickSandFamily,
+        ) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color(0xFFFFF8F7)
         ),

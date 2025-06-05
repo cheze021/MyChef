@@ -21,6 +21,8 @@ class RecipeRepositoryImpl @Inject constructor(
                 imageUrl = "https://...",
                 readyInMinutes = 20,
                 servings = 2,
+                preparationMinutes = 10,
+                cookingMinutes = 10,
                 ingredients = listOf(
                     Ingredient(1, "Tomato", 2.0, "units"),
                     Ingredient(2, "Pasta", 200.0, "grams")

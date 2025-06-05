@@ -15,6 +15,7 @@ import com.example.mychef.ui.cart.CartScreen
 import com.example.mychef.ui.category_recipe.RecipeByCategoryScreen
 import com.example.mychef.ui.favorites.FavoritesScreen
 import com.example.mychef.ui.home.HomeScreen
+import com.example.mychef.ui.recipe_detail.RecipeDetailScreen
 import com.example.mychef.ui.search.SearchScreen
 
 @Composable
@@ -55,12 +56,19 @@ fun NavGraph(
                 CartScreen()
             }
 
+            // route : recipesByCategory/{category}
             composable(
                 "recipesByCategory/{category}",
                 arguments = listOf(navArgument("category") { type = NavType.StringType })
             ) { backStackEntry ->
                 val recipeByCat = backStackEntry.arguments?.getString("category") ?: ""
-                RecipeByCategoryScreen(recipeByCat, recipeViewModel)
+                RecipeByCategoryScreen(recipeByCat, recipeViewModel, navController)
+            }
+
+            // route : recipeDetail
+            // TODO: Implementar para recibir una ID de recipe
+            composable("recipeDetail") {
+                RecipeDetailScreen()
             }
         })
 }

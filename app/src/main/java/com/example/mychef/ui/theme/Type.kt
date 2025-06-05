@@ -8,37 +8,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.mychef.R
 
-val plusJakartaSansFamily = FontFamily(
-    Font(R.font.plus_jakarta_sans_light, FontWeight.Light),
-    Font(R.font.plus_jakarta_sans_regular, FontWeight.Normal),
-    Font(R.font.plus_jakarta_sans_medium, FontWeight.Medium),
-    Font(R.font.plus_jakarta_sans_bold, FontWeight.Bold),
-    Font(R.font.plus_jakarta_sans_extra_bold, FontWeight.ExtraBold)
+val quickSandFamily = FontFamily(
+    Font(R.font.quicksand_light, FontWeight.Light),
+    Font(R.font.quicksand_regular, FontWeight.Normal),
+    Font(R.font.quicksand_medium, FontWeight.Medium),
+    Font(R.font.quicksand_bold, FontWeight.Bold),
+    Font(R.font.quicksand_semi_bold, FontWeight.SemiBold)
 )
 
-// Set of Material typography styles to start with
-val Typography = Typography(
+val AppTypography = Typography(
+    displayLarge = TextStyle(
+        fontFamily = quickSandFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 26.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = quickSandFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 22.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = quickSandFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
     bodyLarge = TextStyle(
-        fontFamily = plusJakartaSansFamily,
+        fontFamily = quickSandFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    // Puedes seguir agregando los estilos que uses
 )

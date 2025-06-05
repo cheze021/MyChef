@@ -9,6 +9,8 @@ data class RecipeDetailDto(
     val image: String,
     val readyInMinutes: Int,
     val servings: Int,
+    val preparationMinutes: Int,
+    val cookingMinutes: Int,
     @SerializedName("extendedIngredients")
     val ingredients: List<IngredientDto>
 ) {
@@ -18,6 +20,8 @@ data class RecipeDetailDto(
         imageUrl = image,
         readyInMinutes = readyInMinutes,
         servings = servings,
+        preparationMinutes = preparationMinutes,
+        cookingMinutes = cookingMinutes,
         ingredients = ingredients.map { it.toDomain() }
     )
 }
