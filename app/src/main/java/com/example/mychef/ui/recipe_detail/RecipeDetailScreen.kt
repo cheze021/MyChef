@@ -2,6 +2,7 @@ package com.example.mychef.ui.recipe_detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,108 +15,152 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.mychef.model.Ingredient
 import com.example.mychef.model.Recipe
+import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.theme.quickSandFamily
 
 @Composable
-fun RecipeDetailScreen() {
-    val fakeRecipe = Recipe(
-        id = 1,
-        title = "Grilled Cajun Salmon",
-        imageUrl = "https://img.spoonacular.com/recipes/1684-556x370.jpg",
-        readyInMinutes = 30,
-        servings = 4,
-        preparationMinutes = 10,
-        cookingMinutes = 20,
-        ingredients = listOf(
-            Ingredient(1, "Ingredient 1", 2.0, "Units"),
-            Ingredient(2, "Ingredient 2", 3.0, "Units"),
-            Ingredient(3, "Ingredient 3", 2.5, "Units"),
-            Ingredient(4, "Ingredient 4", 2.0, "Units"),
-            Ingredient(5, "Ingredient 5", 1.0, "Units"),
-            Ingredient(6, "Ingredient 6", 4.5, "Units"),
-            Ingredient(7, "Ingredient 7", 7.0, "Units"),
-            Ingredient(8, "Ingredient 7", 7.0, "Units"),
-            Ingredient(9, "Ingredient 7", 7.0, "Units"),
-            Ingredient(10, "Ingredient 7", 7.0, "Units"),
-            Ingredient(11, "Ingredient 7", 7.0, "Units"),
-            Ingredient(12, "Ingredient 8", 4.5, "Units")
-        )
-    )
+fun RecipeDetailScreen(
+    recipeId: Int,
+    recipeViewModel: RecipeViewModel = hiltViewModel()
+) {
+    val state by recipeViewModel.uiState.collectAsState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFF8F7))
-            .verticalScroll(rememberScrollState())
-    ) {
-        AsyncImage(
-            model = fakeRecipe.imageUrl,
-            contentDescription = fakeRecipe.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(250.dp),
-            contentScale = ContentScale.Crop
-        )
+    LaunchedEffect(recipeId) {
+        recipeViewModel.loadRecipeDetail(recipeId)
+    }
 
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = fakeRecipe.title,
-                fontFamily = quickSandFamily,
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
-            )
+    when {
+        state.isLoading -> {
+            Box(Modifier
+                .fillMaxSize()
+                .background(Color(0xFFFFF7F7)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            InfoRow(label = "Ready in", value = "${fakeRecipe.readyInMinutes} min")
-            InfoRow(label = "Preparation", value = "${fakeRecipe.preparationMinutes} min")
-            InfoRow(label = "Cooking", value = "${fakeRecipe.cookingMinutes} min")
-            InfoRow(label = "Servings", value = fakeRecipe.servings.toString())
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = "Ingredients",
-                fontFamily = quickSandFamily,
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            IngredientsGrid(ingredients = fakeRecipe.ingredients)
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Button(
-                onClick = { /* TODO: Navegar a pasos o comenzar */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
-                shape = RoundedCornerShape(50)
+        state.error != null -> {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFFFF7F7)),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Check Nutritional Values",
-                    color = Color.White,
+                    text = "Error: ${state.error}",
+                    fontFamily = quickSandFamily,
+                )
+            }
+        }
+
+        state.isSuccess -> {
+            state.selectedRecipe?.let { recipe ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFFFF8F7))
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    AsyncImage(
+                        model = recipe.imageUrl,
+                        contentDescription = recipe.title,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(250.dp),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Column(modifier = Modifier.padding(16.dp)) {
+
+                        RecipeInfo(recipe)
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        IngredientsInfo(recipe)
+
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        Button(
+                            onClick = { /* TODO: Navegar a pasos o comenzar */ },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 8.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
+                            shape = RoundedCornerShape(50)
+                        ) {
+                            Text(
+                                text = "Check Nutritional Values",
+                                color = Color.White,
+                                fontFamily = quickSandFamily
+                            )
+                        }
+                    }
+                }
+            }
+
+        }
+        else -> {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    text= "Recipe not found",
                     fontFamily = quickSandFamily
                 )
             }
         }
     }
+
+
+}
+
+@Composable
+fun IngredientsInfo(recipe: Recipe) {
+    Text(
+        text = "Ingredients",
+        fontFamily = quickSandFamily,
+        style = MaterialTheme.typography.headlineSmall,
+        fontWeight = FontWeight.Bold
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    IngredientsGrid(ingredients = recipe.ingredients)
+}
+
+@Composable
+fun RecipeInfo(recipe: Recipe){
+    Text(
+        text = recipe.title,
+        fontFamily = quickSandFamily,
+        style = MaterialTheme.typography.headlineMedium,
+        fontWeight = FontWeight.Bold
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
+
+    InfoRow(label = "Ready in", value = "${recipe.readyInMinutes} min")
+    InfoRow(label = "Preparation", value = "${recipe.preparationMinutes} min")
+    InfoRow(label = "Cooking", value = "${recipe.cookingMinutes} min")
+    InfoRow(label = "Servings", value = recipe.servings.toString())
 }
 
 @Composable

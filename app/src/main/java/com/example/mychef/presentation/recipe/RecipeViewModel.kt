@@ -19,14 +19,14 @@ class RecipeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(RecipeUiState())
     val uiState: StateFlow<RecipeUiState> = _uiState
 
-    fun loadRecipeDetail(id: Int) {
+    fun loadRecipeDetail(recipeId: Int) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
+            _uiState.update { it.copy(isLoading = true, error = null, isSuccess = false) }
             try {
-                val recipe = repository.getRecipeDetail(id)
-                _uiState.update { it.copy(selectedRecipe = recipe, isLoading = false) }
+                val recipe = repository.getRecipeDetail(recipeId)
+                _uiState.update { it.copy(selectedRecipe = recipe, isLoading = false, isSuccess = true) }
             } catch (e: Exception) {
-                _uiState.update { it.copy(error = e.message, isLoading = false) }
+                _uiState.update { it.copy(error = e.message, isLoading = false, isSuccess = false) }
             }
         }
     }

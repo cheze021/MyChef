@@ -112,7 +112,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun TopAppBar(navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val backArrowScreens = listOf("recipesByCategory/{category}", "recipeDetail")
+    val backArrowScreens = listOf("recipesByCategory/{category}", "recipeDetail/{recipeId}")
     val isBackArrowVisible = currentRoute in backArrowScreens
     val arguments = navBackStackEntry?.arguments
     val category = arguments?.getString("category")

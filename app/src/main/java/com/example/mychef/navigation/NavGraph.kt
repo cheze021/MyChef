@@ -66,9 +66,12 @@ fun NavGraph(
             }
 
             // route : recipeDetail
-            // TODO: Implementar para recibir una ID de recipe
-            composable("recipeDetail") {
-                RecipeDetailScreen()
+            composable(
+                "recipeDetail/{recipeId}",
+                arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
+                RecipeDetailScreen(recipeId)
             }
         })
 }

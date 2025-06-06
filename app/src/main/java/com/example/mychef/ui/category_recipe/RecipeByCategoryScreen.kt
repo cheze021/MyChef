@@ -98,7 +98,7 @@ fun RecipeByCategoryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 6.dp)
-                            .clickable { navController.navigate("recipeDetail") },
+                            .clickable { navController.navigate("recipeDetail/${recipe.id}") },
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
