@@ -42,4 +42,16 @@ class RecipeViewModel @Inject constructor(
             }
         }
     }
+
+    fun loadRecipeNutrients(recipeId: Int) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            try {
+                val nutrients = repository.getRecipeNutrients(recipeId)
+                _uiState.update { it.copy(recipeNutrients = nutrients, isLoading = false) }
+            } catch(e: Exception) {
+                _uiState.update { it.copy(error = e.message, isLoading = false) }
+            }
+        }
+    }
 }

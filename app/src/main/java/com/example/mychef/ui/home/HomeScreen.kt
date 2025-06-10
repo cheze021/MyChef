@@ -34,17 +34,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.mychef.R
-import com.example.mychef.model.CategoryProvider
-import com.example.mychef.model.FeaturedProvider
-import com.example.mychef.ui.model.CategoriesListModel
-import com.example.mychef.ui.model.FeaturedListModel
+import com.example.mychef.model.category.CategoryProvider
+import com.example.mychef.model.category.FeaturedProvider
 import com.example.mychef.ui.theme.quickSandFamily
 import com.example.mychef.utils.capitalizeWords
 

@@ -127,7 +127,6 @@ fun RecipeByCategoryScreen(
                                 color = Color(0xFF333333),
                                 modifier = Modifier.weight(1f)
                             )
-                            // Opcional: ícono sutil si lo preferís
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowRight,
                                 contentDescription = "Go",

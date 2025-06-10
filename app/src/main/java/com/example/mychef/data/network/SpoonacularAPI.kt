@@ -1,5 +1,6 @@
 package com.example.mychef.data.network
 
+import com.example.mychef.data.network.dto.NutritionInfoDto
 import com.example.mychef.data.network.dto.RecipeDetailDto
 import com.example.mychef.data.network.response.RandomRecipesResponse
 import com.example.mychef.data.network.response.SearchRecipesResponse
@@ -33,4 +34,10 @@ interface SpoonacularApi {
         @Path("id") id: Int,
         @Query("apiKey") apiKey: String
     ): RecipeDetailDto
+
+    @GET("recipes/{id}/nutritionWidget.json")
+    suspend fun getRecipeNutrients(
+        @Path("id") id: Int,
+        @Query("apiKey") apiKey: String
+    ): NutritionInfoDto
 }

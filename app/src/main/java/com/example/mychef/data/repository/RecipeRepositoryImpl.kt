@@ -3,6 +3,7 @@ package com.example.mychef.data.repository
 import com.example.mychef.data.network.SpoonacularApi
 import com.example.mychef.domain.RecipeRepository
 import com.example.mychef.model.Ingredient
+import com.example.mychef.model.nutrition.NutritionInfo
 import com.example.mychef.model.Recipe
 import javax.inject.Inject
 
@@ -46,5 +47,9 @@ class RecipeRepositoryImpl @Inject constructor(
 
     override suspend fun getRecipeDetail(id: Int): Recipe {
         return api.getRecipeDetail(id, apiKey).toDomain()
+    }
+
+    override suspend fun getRecipeNutrients(id: Int): NutritionInfo {
+        return api.getRecipeNutrients(id, apiKey).toDomain()
     }
 }

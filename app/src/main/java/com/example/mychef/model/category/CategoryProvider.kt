@@ -1,4 +1,4 @@
-package com.example.mychef.model
+package com.example.mychef.model.category
 
 import com.example.mychef.R
 
