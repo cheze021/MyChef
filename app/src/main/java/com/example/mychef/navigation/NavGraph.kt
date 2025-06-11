@@ -10,11 +10,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.mychef.model.nutrition.NutritionInfo
 import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.cart.CartScreen
 import com.example.mychef.ui.category_recipe.RecipeByCategoryScreen
 import com.example.mychef.ui.favorites.FavoritesScreen
 import com.example.mychef.ui.home.HomeScreen
+import com.example.mychef.ui.recipe_detail.RecipeDetailScreen
+import com.example.mychef.ui.recipe_detail.RecipeNutritionScreen
 import com.example.mychef.ui.search.SearchScreen
 
 @Composable
@@ -55,12 +58,29 @@ fun NavGraph(
                 CartScreen()
             }
 
+            // route : recipesByCategory/{category}
             composable(
                 "recipesByCategory/{category}",
                 arguments = listOf(navArgument("category") { type = NavType.StringType })
             ) { backStackEntry ->
                 val recipeByCat = backStackEntry.arguments?.getString("category") ?: ""
-                RecipeByCategoryScreen(recipeByCat, recipeViewModel)
+                RecipeByCategoryScreen(recipeByCat, recipeViewModel, navController)
+            }
+
+            // route : recipeDetail
+            composable(
+                "recipeDetail/{recipeId}",
+                arguments = listOf(navArgument("recipeId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val recipeId = backStackEntry.arguments?.getInt("recipeId") ?: 0
+                RecipeDetailScreen(recipeId, recipeViewModel, navController)
+            }
+
+            // route : recipeNutrition
+            composable("recipeNutrition"
+            ) {
+                val nutritionInfo = recipeViewModel.getRecipeNutrients()
+                RecipeNutritionScreen(nutritionInfo)
             }
         })
 }

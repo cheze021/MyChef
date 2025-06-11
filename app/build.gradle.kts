@@ -5,6 +5,7 @@ plugins {
     id("com.squareup.sqldelight") version "1.5.5"
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -85,6 +86,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.56.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    // Jsoup
+    implementation("org.jsoup:jsoup:1.17.2")
 }
 
 sqldelight {

@@ -15,5 +15,7 @@ data class RecipeDto(
         imageUrl = image ?: "",
         readyInMinutes = readyInMinutes ?: 0,
         servings = servings ?: 0,
+        preparationMinutes = 0,
+        cookingMinutes = 0
     )
 }

@@ -45,13 +45,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.mychef.presentation.recipe.RecipeViewModel
+import com.example.mychef.ui.theme.quickSandFamily
 
 @Composable
 fun RecipeByCategoryScreen(
     categoryName: String,
-    recipeViewModel: RecipeViewModel = hiltViewModel()
+    recipeViewModel: RecipeViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val state by recipeViewModel.uiState.collectAsState()
 
@@ -77,7 +80,10 @@ fun RecipeByCategoryScreen(
                     .background(Color(0xFFFFF7F7)),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Error: ${state.error}")
+                Text(
+                    text = "Error: ${state.error}",
+                    fontFamily = quickSandFamily,
+                )
             }
         }
 
@@ -92,7 +98,7 @@ fun RecipeByCategoryScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 12.dp, vertical = 6.dp)
-                            .clickable { /* Navegar a detalle */ },
+                            .clickable { navController.navigate("recipeDetail/${recipe.id}") },
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
                         shape = RoundedCornerShape(12.dp)
                     ) {
@@ -114,13 +120,13 @@ fun RecipeByCategoryScreen(
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
                                 text = recipe.title,
+                                fontFamily = quickSandFamily,
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 14.sp,
                                 color = Color(0xFF333333),
                                 modifier = Modifier.weight(1f)
                             )
-                            // Opcional: ícono sutil si lo preferís
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowRight,
                                 contentDescription = "Go",
@@ -134,7 +140,10 @@ fun RecipeByCategoryScreen(
 
         else -> {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("No recipes found in this category.")
+                Text(
+                    text= "No recipes found in this category.",
+                    fontFamily = quickSandFamily
+                )
             }
         }
     }
