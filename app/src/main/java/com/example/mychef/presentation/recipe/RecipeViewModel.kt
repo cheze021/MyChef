@@ -2,8 +2,8 @@ package com.example.mychef.presentation.recipe
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mychef.domain.RecipeRepository
+import com.example.mychef.model.nutrition.NutritionInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,6 +18,14 @@ class RecipeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(RecipeUiState())
     val uiState: StateFlow<RecipeUiState> = _uiState
+
+    fun setSelectedNutritionInfo(nutritionInfo: NutritionInfo?) {
+        _uiState.update { it.copy(recipeNutrients = nutritionInfo) }
+    }
+
+    fun getRecipeNutrients(): NutritionInfo? {
+        return uiState.value.recipeNutrients
+    }
 
     fun loadRecipeDetail(recipeId: Int) {
         viewModelScope.launch {

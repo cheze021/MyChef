@@ -4,13 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
@@ -21,6 +27,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -112,7 +119,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 fun TopAppBar(navController: NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val backArrowScreens = listOf("recipesByCategory/{category}", "recipeDetail/{recipeId}")
+    val backArrowScreens = listOf("recipesByCategory/{category}", "recipeDetail/{recipeId}", "recipeNutrition")
     val isBackArrowVisible = currentRoute in backArrowScreens
     val arguments = navBackStackEntry?.arguments
     val category = arguments?.getString("category")
@@ -123,22 +130,33 @@ fun TopAppBar(navController: NavHostController){
         "search" -> "Search"
         "cart" -> "Cart"
         "recipesByCategory/{category}" -> category?.replaceFirstChar { it.uppercase() } ?: "Category"
+        "recipeNutrition" -> "Nutrition Breakdown"
         else -> ""
     }
 
     CenterAlignedTopAppBar(
         title = { Text(
-            screenTitle,
-            fontWeight = FontWeight.Bold,
+            text = screenTitle,
             fontFamily = quickSandFamily,
+            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
         ) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color(0xFFFFF8F7)
         ),
         navigationIcon = {
             if (isBackArrowVisible) {
-                IconButton(onClick = { navController.popBackStack() }) {
-                    Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                IconButton(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .size(40.dp)
+                        .clip(CircleShape) // Más redondeado
+                        .background(Color(0x1EC5847C)),
+                    onClick = { navController.popBackStack() }) {
+                    Icon(
+                        Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color(0xC3F59386),
+                    )
                 }
             }
         }
