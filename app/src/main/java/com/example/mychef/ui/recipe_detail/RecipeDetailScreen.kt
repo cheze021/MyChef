@@ -39,7 +39,6 @@ import com.example.mychef.model.Recipe
 import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.theme.quickSandFamily
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailScreen(
     recipeId: Int,
