@@ -34,8 +34,8 @@ fun GenericAlertDialog(
     icon: ImageVector,
     confirmText: String,
     dismissText: String,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
+    onConfirm: () -> Unit = {},
+    onDismiss: () -> Unit = {},
     dismissOnBackPress: Boolean = true,
     dismissOnClickOutside: Boolean = true,
     isFavorite: Boolean

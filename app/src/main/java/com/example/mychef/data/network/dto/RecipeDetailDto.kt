@@ -22,6 +22,6 @@ data class RecipeDetailDto(
         servings = servings,
         preparationMinutes = preparationMinutes,
         cookingMinutes = cookingMinutes,
-        ingredients = ingredients.map { it.toDomain() }
+        ingredients = ingredients.map { it.toDomain() },
     )
 }

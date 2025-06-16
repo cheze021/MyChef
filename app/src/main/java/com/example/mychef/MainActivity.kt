@@ -13,9 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -131,13 +129,8 @@ fun TopAppBar(navController: NavHostController){
     val currentRoute = navBackStackEntry?.destination?.route
     val backArrowScreens = listOf("recipesByCategory/{category}", "recipeDetail/{recipeId}", "recipeNutrition")
     val isBackArrowVisible = currentRoute in backArrowScreens
-    val isFavoritesButtonVisible = currentRoute == "recipeDetail/{recipeId}"
     val arguments = navBackStackEntry?.arguments
     val category = arguments?.getString("category")
-
-    var isFavorite by remember { mutableStateOf(false) }
-    var showDialog by remember { mutableStateOf(false) }
-
 
     val screenTitle = when (currentRoute) {
         "home" -> "Home"
@@ -147,42 +140,6 @@ fun TopAppBar(navController: NavHostController){
         "recipesByCategory/{category}" -> category?.replaceFirstChar { it.uppercase() } ?: "Category"
         "recipeNutrition" -> "Nutrition Breakdown"
         else -> ""
-    }
-
-    if (showDialog) {
-        if(isFavorite){
-            GenericAlertDialog(
-                title = "Added to favorites!",
-                icon = Icons.Default.CheckCircle,
-                message = "Recipe has been added to favorites successfully",
-                confirmText = "Go to favorites",
-                dismissText = "Ok",
-                onConfirm = {
-                    showDialog = false
-                    // Acción de confirmación
-                },
-                onDismiss = {
-                    showDialog = false
-                },
-                isFavorite = isFavorite
-            )
-        } else {
-            GenericAlertDialog(
-                title = "Deleted from favorites :(",
-                icon = Icons.Default.Delete,
-                message = "Oh... recipe has been deleted from your favorites",
-                confirmText = "",
-                dismissText = "Ok",
-                onConfirm = {
-                    showDialog = false
-                    // Acción de confirmación
-                },
-                onDismiss = {
-                    showDialog = false
-                },
-                isFavorite = isFavorite
-            )
-        }
     }
 
     CenterAlignedTopAppBar(
@@ -208,31 +165,6 @@ fun TopAppBar(navController: NavHostController){
                         contentDescription = "Back",
                         tint = Color(0xC3F59386),
                     )
-                }
-            }
-        },
-        actions = {
-            if(isFavoritesButtonVisible) {
-                IconButton(onClick = {
-                    showDialog = true
-                    isFavorite = !isFavorite
-                }) {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .border(
-                                width = 2.dp,
-                                color = if (isFavorite) Color(0xFFE57373) else Color.Gray,
-                                shape = CircleShape
-                            )
-                            .padding(8.dp) // Espaciado interno para centrar el ícono
-                    ) {
-                        Icon(
-                            imageVector = Icons.Sharp.Favorite, // Podés usar otro ícono si querés
-                            contentDescription = "Favorites",
-                            tint = if(isFavorite) Color(0xFFE57373) else Color.Gray
-                        )
-                    }
                 }
             }
         }

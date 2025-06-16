@@ -8,5 +8,5 @@ data class Recipe(
     val servings: Int,
     val preparationMinutes: Int,
     val cookingMinutes: Int,
-    val ingredients: List<Ingredient> = emptyList()
+    val ingredients: List<Ingredient> = emptyList(),
 )
