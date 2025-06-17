@@ -79,4 +79,16 @@ class RecipeViewModel @Inject constructor(
     fun isFavorite(recipeId: Int): Boolean {
         return favoritesRepository.isFavorite(recipeId)
     }
+
+    fun getFavorites() {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null, isSuccess = false) }
+            try {
+                val favorites = favoritesRepository.getFavorites()
+                _uiState.update { it.copy(favorites = favorites, isLoading = false, isSuccess = true) }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(error = e.message, isLoading = false, isSuccess = false) }
+            }
+        }
+    }
 }

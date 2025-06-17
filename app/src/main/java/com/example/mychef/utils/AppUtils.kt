@@ -81,10 +81,10 @@ fun GenericAlertDialog(
             }
         },
         dismissButton = {
-            StyledDismissButton(onDismiss, dismissText)
+            StyledDarkerButton(onDismiss, dismissText)
         },
         confirmButton = {
-            if(isFavorite) StyledConfirmButton(onConfirm, confirmText)
+            if(isFavorite) StyledLightButton(onConfirm, confirmText)
         },
         properties = DialogProperties(
             dismissOnBackPress = dismissOnBackPress,
@@ -95,7 +95,7 @@ fun GenericAlertDialog(
 
 
 @Composable
-fun StyledConfirmButton(
+fun StyledLightButton(
     onConfirm: () -> Unit,
     confirmText: String,
 ) {
@@ -123,7 +123,7 @@ fun StyledConfirmButton(
 }
 
 @Composable
-fun StyledDismissButton(
+fun StyledDarkerButton(
     onDismiss: () -> Unit,
     dismissText: String
 ) {

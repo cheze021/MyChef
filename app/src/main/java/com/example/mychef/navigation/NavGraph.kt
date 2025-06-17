@@ -45,7 +45,7 @@ fun NavGraph(
 
             // route : favorites
             composable("favorites") {
-                FavoritesScreen()
+                FavoritesScreen(navController = navController)
             }
 
             // route : search
