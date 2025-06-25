@@ -9,4 +9,5 @@ data class Recipe(
     val preparationMinutes: Int,
     val cookingMinutes: Int,
     val ingredients: List<Ingredient> = emptyList(),
+    val category: List<String> = emptyList(),
 )

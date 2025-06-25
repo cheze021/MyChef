@@ -11,7 +11,6 @@ import com.example.mychef.model.category.CategoryProvider
 import com.example.mychef.model.nutrition.BadValues
 import com.example.mychef.model.nutrition.GoodValues
 import com.example.mychef.model.nutrition.NutritionInfo
-import com.example.mychef.ui.favorites.CategoryFilterBar
 import com.example.mychef.ui.favorites.CategoryFilterChips
 import com.example.mychef.ui.home.HomeScreen
 import com.example.mychef.ui.recipe_detail.NutritionGrid
@@ -72,10 +71,4 @@ fun RecipeNutritionScreenPreview() {
     RecipeNutritionScreen(
         fakeNutritionInfo
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun FilterChipPreview() {
-    CategoryFilterBar()
 }
