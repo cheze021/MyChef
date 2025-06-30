@@ -1,6 +1,7 @@
 package com.example.mychef.ui.recipe_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,20 +11,31 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.sharp.Favorite
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,8 +50,8 @@ import com.example.mychef.model.Ingredient
 import com.example.mychef.model.Recipe
 import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.theme.quickSandFamily
+import com.example.mychef.utils.GenericAlertDialog
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeDetailScreen(
     recipeId: Int,
@@ -97,7 +109,7 @@ fun RecipeDetailScreen(
 
                     Column(modifier = Modifier.padding(16.dp)) {
 
-                        RecipeInfo(recipe)
+                        RecipeInfo(recipe, recipeViewModel, navController)
 
                         Spacer(modifier = Modifier.height(24.dp))
 
@@ -136,8 +148,6 @@ fun RecipeDetailScreen(
             }
         }
     }
-
-
 }
 
 @Composable
@@ -155,13 +165,50 @@ fun IngredientsInfo(recipe: Recipe) {
 }
 
 @Composable
-fun RecipeInfo(recipe: Recipe){
-    Text(
-        text = recipe.title,
-        fontFamily = quickSandFamily,
-        style = MaterialTheme.typography.headlineMedium,
-        fontWeight = FontWeight.Bold
-    )
+fun RecipeInfo(recipe: Recipe, recipeViewModel: RecipeViewModel, navController: NavController){
+    var showDialog by remember { mutableStateOf(false) }
+    val isInFavorites = recipeViewModel.isFavorite(recipe.id)
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = recipe.title,
+            fontFamily = quickSandFamily,
+            style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        IconButton(onClick = {
+            showDialog = true
+            if (isInFavorites) {
+                recipeViewModel.removeFromFavorites(recipe.id)
+            } else {
+                recipeViewModel.addToFavorites(recipe)
+            }
+        }) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .border(
+                        width = 2.dp,
+                        color = if (isInFavorites) Color(0xFFE57373) else Color.Gray,
+                        shape = CircleShape
+                    )
+                    .padding(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Sharp.Favorite,
+                    contentDescription = "Favorites",
+                    tint = if(isInFavorites) Color(0xFFE57373) else Color.Gray
+                )
+            }
+        }
+    }
 
     Spacer(modifier = Modifier.height(16.dp))
 
@@ -169,6 +216,38 @@ fun RecipeInfo(recipe: Recipe){
     InfoRow(label = "Preparation", value = "${recipe.preparationMinutes} min")
     InfoRow(label = "Cooking", value = "${recipe.cookingMinutes} min")
     InfoRow(label = "Servings", value = recipe.servings.toString())
+
+    if (showDialog) {
+        if(isInFavorites){
+            GenericAlertDialog(
+                title = "Added to favorites!",
+                icon = Icons.Default.CheckCircle,
+                message = "Recipe has been added to favorites successfully",
+                confirmText = "Go to favorites",
+                dismissText = "Ok",
+                onConfirm = {
+                    showDialog = false
+                    navController.navigate("favorites")
+                },
+                onDismiss = {
+                    showDialog = false
+                },
+                isFavorite = true
+            )
+        } else {
+            GenericAlertDialog(
+                title = "Removed from favorites :(",
+                icon = Icons.Default.Delete,
+                message = "Oh... the recipe has been removed from your favorites",
+                confirmText = "",
+                dismissText = "Ok",
+                onDismiss = {
+                    showDialog = false
+                },
+                isFavorite = false
+            )
+        }
+    }
 }
 
 @Composable

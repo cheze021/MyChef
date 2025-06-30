@@ -12,7 +12,9 @@ data class RecipeDetailDto(
     val preparationMinutes: Int,
     val cookingMinutes: Int,
     @SerializedName("extendedIngredients")
-    val ingredients: List<IngredientDto>
+    val ingredients: List<IngredientDto>,
+    @SerializedName("dishTypes")
+    val category: List<String>
 ) {
     fun toDomain() = Recipe(
         id = id,
@@ -22,6 +24,7 @@ data class RecipeDetailDto(
         servings = servings,
         preparationMinutes = preparationMinutes,
         cookingMinutes = cookingMinutes,
-        ingredients = ingredients.map { it.toDomain() }
+        ingredients = ingredients.map { it.toDomain() },
+        category = category
     )
 }
