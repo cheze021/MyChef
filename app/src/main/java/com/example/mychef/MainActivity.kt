@@ -135,7 +135,7 @@ fun TopAppBar(navController: NavHostController){
     val screenTitle = when (currentRoute) {
         "home" -> "Home"
         "favorites" -> "Favorites"
-        "search" -> "Search"
+        "search" -> "Search by Nutrients"
         "cart" -> "Cart"
         "recipesByCategory/{category}" -> category?.replaceFirstChar { it.uppercase() } ?: "Category"
         "recipeNutrition" -> "Nutrition Breakdown"

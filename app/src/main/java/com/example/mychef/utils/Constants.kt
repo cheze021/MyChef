@@ -33,4 +33,17 @@ object Constants {
     )
 
     const val BASE_URL = "https://api.spoonacular.com/"
+
+    val dietStepperValues = listOf(
+        "Carbs",
+        "Protein",
+        "Calories",
+        "Fat", "Calcium",
+        "Satured Fat",
+        "Fiber",
+        "Potassium",
+        "Sodium",
+        "Sugar",
+        "Number of Recipes"
+    )
 }

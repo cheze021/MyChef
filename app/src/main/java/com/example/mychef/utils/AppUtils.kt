@@ -3,6 +3,7 @@ package com.example.mychef.utils
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.example.mychef.ui.theme.quickSandFamily
 
 
 @Composable
@@ -96,15 +98,14 @@ fun GenericAlertDialog(
 
 @Composable
 fun StyledLightButton(
-    onConfirm: () -> Unit,
-    confirmText: String,
+    onClick: () -> Unit,
+    text: String,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.padding(horizontal = 24.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Button(
-            onClick = onConfirm,
+            onClick = onClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFF7F0F0),
                 contentColor = Color.Black
@@ -115,7 +116,7 @@ fun StyledLightButton(
                 .height(50.dp)
         ) {
             Text(
-                text = confirmText,
+                text = text,
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
             )
         }
@@ -124,15 +125,14 @@ fun StyledLightButton(
 
 @Composable
 fun StyledDarkerButton(
-    onDismiss: () -> Unit,
-    dismissText: String
+    onClick: () -> Unit,
+    text: String
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier.padding(horizontal = 24.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Button(
-            onClick = onDismiss,
+            onClick = onClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFE8AEB1),
                 contentColor = Color.Black
@@ -143,8 +143,33 @@ fun StyledDarkerButton(
                 .height(50.dp)
         ) {
             Text(
-                text = dismissText,
+                text = text,
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+            )
+        }
+    }
+}
+
+@Composable
+fun StyledRedButton(
+    onClick: () -> Unit,
+    text: String
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Button(
+            onClick = onClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
+            shape = RoundedCornerShape(50)
+        ) {
+            Text(
+                text = text,
+                color = Color.White,
+                fontFamily = quickSandFamily
             )
         }
     }

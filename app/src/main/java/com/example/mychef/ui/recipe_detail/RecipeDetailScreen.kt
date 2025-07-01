@@ -51,6 +51,7 @@ import com.example.mychef.model.Recipe
 import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.theme.quickSandFamily
 import com.example.mychef.utils.GenericAlertDialog
+import com.example.mychef.utils.StyledRedButton
 
 @Composable
 fun RecipeDetailScreen(
@@ -115,25 +116,15 @@ fun RecipeDetailScreen(
 
                         IngredientsInfo(recipe)
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                        Button(
+                        StyledRedButton(
                             onClick = {
                                 recipeViewModel.setSelectedNutritionInfo(state.recipeNutrients)
                                 navController.navigate("recipeNutrition")
                             },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 8.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE53935)),
-                            shape = RoundedCornerShape(50)
-                        ) {
-                            Text(
-                                text = "Check Nutritional Values",
-                                color = Color.White,
-                                fontFamily = quickSandFamily
-                            )
-                        }
+                            text = "Check Nutritional Values"
+                        )
                     }
                 }
             }
