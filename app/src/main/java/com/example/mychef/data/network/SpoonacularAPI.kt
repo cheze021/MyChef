@@ -40,4 +40,6 @@ interface SpoonacularApi {
         @Path("id") id: Int,
         @Query("apiKey") apiKey: String
     ): NutritionInfoDto
+
+
 }

@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.6.1")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation("androidx.activity:activity-compose:1.8.2")
+    implementation("androidx.compose.material:material-icons-extended:1.6.1")
 
     // SQLDelight
     implementation("com.squareup.sqldelight:android-driver:1.5.5")

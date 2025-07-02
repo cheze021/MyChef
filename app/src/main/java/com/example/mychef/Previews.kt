@@ -16,6 +16,7 @@ import com.example.mychef.ui.home.HomeScreen
 import com.example.mychef.ui.recipe_detail.NutritionGrid
 import com.example.mychef.ui.recipe_detail.RecipeDetailScreen
 import com.example.mychef.ui.recipe_detail.RecipeNutritionScreen
+import com.example.mychef.ui.search.SearchScreen
 
 @Composable
 @Preview(showBackground = true)
@@ -71,4 +72,10 @@ fun RecipeNutritionScreenPreview() {
     RecipeNutritionScreen(
         fakeNutritionInfo
     )
+}
+
+@Preview
+@Composable
+fun SearchScreenPreview() {
+    SearchScreen()
 }
