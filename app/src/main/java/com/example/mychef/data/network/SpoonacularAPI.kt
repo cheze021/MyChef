@@ -3,10 +3,12 @@ package com.example.mychef.data.network
 import com.example.mychef.data.network.dto.NutritionInfoDto
 import com.example.mychef.data.network.dto.RecipeDetailDto
 import com.example.mychef.data.network.response.RandomRecipesResponse
+import com.example.mychef.data.network.response.RecipeByNutrientResponse
 import com.example.mychef.data.network.response.SearchRecipesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface SpoonacularApi {
     @GET("recipes/random")
@@ -41,5 +43,9 @@ interface SpoonacularApi {
         @Query("apiKey") apiKey: String
     ): NutritionInfoDto
 
-
+    @GET("recipes/findByNutrients")
+    suspend fun getRecipeByNutrients(
+        @QueryMap filters: Map<String, String>,
+        @Query("apiKey") apiKey: String
+    ): RecipeByNutrientResponse
 }

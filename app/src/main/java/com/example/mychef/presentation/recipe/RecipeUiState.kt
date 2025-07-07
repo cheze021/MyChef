@@ -10,6 +10,7 @@ data class RecipeUiState(
     val selectedRecipe: Recipe? = null,
     val recipesByCategory: List<Recipe> = emptyList(),
     val recipeNutrients: NutritionInfo? = null,
+    val recipesByNutrients: List<Recipe> = emptyList(),
     val favorites: StateFlow<List<Recipe>> = MutableStateFlow(emptyList()),
     val isSuccess: Boolean = false,
     val isLoading: Boolean = false,

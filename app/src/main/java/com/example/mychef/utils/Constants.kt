@@ -39,7 +39,7 @@ object Constants {
         "Protein",
         "Calories",
         "Fat", "Calcium",
-        "Satured Fat",
+        "Saturated Fat",
         "Fiber",
         "Potassium",
         "Sodium",

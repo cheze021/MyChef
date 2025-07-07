@@ -46,10 +46,16 @@ class RecipeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecipeDetail(id: Int): Recipe {
-        return api.getRecipeDetail(id, apiKey).toDomain()
+        return api.getRecipeDetail(id = id, apiKey = apiKey).toDomain()
     }
 
     override suspend fun getRecipeNutrients(id: Int): NutritionInfo {
-        return api.getRecipeNutrients(id, apiKey).toDomain()
+        return api.getRecipeNutrients(id = id, apiKey = apiKey).toDomain()
     }
+
+    override suspend fun getRecipesByNutrients(filters: Map<String, String>): List<Recipe> {
+        return api.getRecipeByNutrients(filters = filters, apiKey = apiKey).result.map { it.toDomain() }
+    }
+
+
 }

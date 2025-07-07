@@ -1,5 +1,6 @@
 package com.example.mychef.ui.search
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -36,6 +37,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -196,7 +199,13 @@ fun DietRangeItem(
     expanded: Boolean,
     onExpandToggle: () -> Unit,
     onMinChange: (Int) -> Unit,
-    onMaxChange: (Int) -> Unit
+    onMaxChange: (Int) -> Unit,
+    showSingleFieldOnly: Boolean = false,
+    singleFieldLabel: String? = null,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    showCheckbox: Boolean = true,
+    alwaysEnabled: Boolean = false,
 ) {
     val rotation by animateFloatAsState(targetValue = if (expanded) 180f else 0f)
 
@@ -206,7 +215,11 @@ fun DietRangeItem(
             .padding(horizontal = 12.dp, vertical = 6.dp)
             .clickable { onExpandToggle() },
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFFFFAF9)
+            containerColor = when {
+                alwaysEnabled -> Color(0xFFFFFAF9)
+                checked -> Color(0xFFFFFAF9)
+                else -> Color(0xFFF2F2F2)
+            }
         ),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(0.8.dp, Color(0xFFEADDD8)),
@@ -224,7 +237,19 @@ fun DietRangeItem(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                if (showCheckbox) {
+                    Checkbox(
+                        checked = checked,
+                        onCheckedChange = { onCheckedChange(it) },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = Color(0xFFE07061),
+                            uncheckedColor = Color.Gray
+                        )
+                    )
+                }
+
                 Text(
+                    modifier = Modifier.weight(1f),
                     text = label,
                     letterSpacing = 1.sp,
                     fontSize = if (expanded) 16.sp else 20.sp,
@@ -248,22 +273,31 @@ fun DietRangeItem(
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
-                Column {
+                if (showSingleFieldOnly) {
                     DietStepperTextField(
                         value = minValue,
                         onValueChange = onMinChange,
-                        label = "Min value",
+                        label = singleFieldLabel ?: label,
                         modifier = Modifier.fillMaxWidth()
                     )
+                } else {
+                    Column {
+                        DietStepperTextField(
+                            value = minValue,
+                            onValueChange = onMinChange,
+                            label = "Min value",
+                            modifier = Modifier.fillMaxWidth()
+                        )
 
-                    Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
-                    DietStepperTextField(
-                        value = maxValue,
-                        onValueChange = onMaxChange,
-                        label = "Max value",
-                        modifier = Modifier.fillMaxWidth()
-                    )
+                        DietStepperTextField(
+                            value = maxValue,
+                            onValueChange = onMaxChange,
+                            label = "Max value",
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
                 }
             }
         }
@@ -274,14 +308,31 @@ fun DietRangeItem(
 fun DietRangeList() {
     val nutrientRanges = remember {
         mutableStateMapOf<String, Pair<Int, Int>>().apply {
-            dietStepperValues.forEach { put(it, 0 to 100) }
+            dietStepperValues.forEach {
+                if(it == "Calories"){
+                    put(it, 50 to 800)
+                }
+                else if(it == "Number of Recipes") {
+                    put(it, 0 to 20)
+                } else {
+                    put(it, 0 to 100)
+                }
+            }
         }
     }
 
     var expandedItem by rememberSaveable { mutableStateOf<String?>(null) }
 
+    val selectedFilters = remember {
+        mutableStateMapOf<String, Boolean>().apply {
+            dietStepperValues.forEach { put(it, false) }
+        }
+    }
+
     dietStepperValues.forEach { nutrient ->
         val (min, max) = nutrientRanges[nutrient] ?: (0 to 100)
+        val isSingleField = nutrient == "Number of Recipes"
+        val isChecked = selectedFilters[nutrient] == true
 
         DietRangeItem(
             label = nutrient,
@@ -296,8 +347,41 @@ fun DietRangeList() {
             },
             onMaxChange = { newMax ->
                 nutrientRanges[nutrient] = (nutrientRanges[nutrient]?.first ?: 0) to newMax
-            }
+            },
+            showSingleFieldOnly = isSingleField,
+            singleFieldLabel = if (isSingleField) "Enter a number (1 - 20)" else null,
+            checked = isChecked,
+            onCheckedChange = { selected ->
+                selectedFilters[nutrient] = selected
+            },
+            showCheckbox = !isSingleField,
+            alwaysEnabled = isSingleField
         )
     }
 
+    buildNutrientQueryParams(selectedFilters, nutrientRanges)
+}
+
+fun buildNutrientQueryParams(
+    selectedFilters: Map<String, Boolean>,
+    nutrientRanges: Map<String, Pair<Int, Int>>
+): Map<String, String> {
+    val query = mutableMapOf<String, String>()
+
+    selectedFilters.forEach { (nutrient, isSelected) ->
+        if (isSelected || nutrient == "Number of Recipes") {
+            val (min, max) = nutrientRanges[nutrient] ?: (0 to 100)
+            val normalizedKey = nutrient.replace(" ", "")
+
+            when (nutrient) {
+                "Number of Recipes" -> query["number"] = max.toString()
+                else -> {
+                    if (min > 0) query["min$normalizedKey"] = min.toString()
+                    if (max > 0) query["max$normalizedKey"] = max.toString()
+                }
+            }
+        }
+    }
+    Log.d("Query: ", query.toString())
+    return query
 }

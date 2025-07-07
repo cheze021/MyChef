@@ -10,4 +10,5 @@ interface RecipeRepository {
     suspend fun getRecipesByCategory(category: String): List<Recipe>
     suspend fun getRecipeDetail(id: Int): Recipe
     suspend fun getRecipeNutrients(id: Int): NutritionInfo
+    suspend fun getRecipesByNutrients(filters: Map<String, String>): List<Recipe>
 }

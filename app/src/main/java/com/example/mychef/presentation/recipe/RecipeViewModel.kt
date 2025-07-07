@@ -21,7 +21,6 @@ class RecipeViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(RecipeUiState())
     val uiState: StateFlow<RecipeUiState> = _uiState
-    val favorites: StateFlow<List<Recipe>> = favoritesRepository.getFavorites()
 
     fun setSelectedNutritionInfo(nutritionInfo: NutritionInfo?) {
         _uiState.update { it.copy(recipeNutrients = nutritionInfo) }
@@ -62,6 +61,18 @@ class RecipeViewModel @Inject constructor(
                 val nutrients = repository.getRecipeNutrients(recipeId)
                 _uiState.update { it.copy(recipeNutrients = nutrients, isLoading = false) }
             } catch(e: Exception) {
+                _uiState.update { it.copy(error = e.message, isLoading = false) }
+            }
+        }
+    }
+
+    fun loadRecipeByNutrients(filters: Map<String, String>) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, error = null) }
+            try {
+                val recipes = repository.getRecipesByNutrients(filters)
+                _uiState.update { it.copy(recipesByNutrients = recipes, isLoading = false) }
+            } catch (e: Exception){
                 _uiState.update { it.copy(error = e.message, isLoading = false) }
             }
         }
