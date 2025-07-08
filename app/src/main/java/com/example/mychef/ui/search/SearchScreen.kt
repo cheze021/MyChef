@@ -3,7 +3,10 @@ package com.example.mychef.ui.search
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -31,14 +34,19 @@ import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DinnerDining
+import androidx.compose.material.icons.filled.EggAlt
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.RestaurantMenu
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -53,46 +61,61 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.mychef.presentation.recipe.RecipeViewModel
 import com.example.mychef.ui.theme.quickSandFamily
 import com.example.mychef.utils.Constants.dietStepperValues
+import com.example.mychef.utils.GenericAlertDialog
 import com.example.mychef.utils.StyledDarkerButton
+import com.example.mychef.utils.animations.AnimatedLoadingModal
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun SearchScreen() {
+fun SearchScreen(
+    navController: NavController,
+    recipeViewModel: RecipeViewModel = hiltViewModel()
+) {
+    var loading by rememberSaveable { mutableStateOf(false) }
+    var loadingMessage by remember { mutableStateOf("Loading recipes...") }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFFFF7F7))
-    ) {
-        item{
-            DietRangeList()
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            ) {
-                StyledDarkerButton(
-                    onClick = {  },
-                    text = "Start Search"
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFFFFF7F7))
+        ) {
+            item {
+                DietParametersSection(
+                    onStartLoading = {
+                        loading = true
+                        loadingMessage = "Loading recipes..."
+                    },
+                    onMessageUpdate = { loadingMessage = it },
+                    onStopLoading = { loading = false }
                 )
             }
+        }
 
+        if (loading) {
+            AnimatedLoadingModal(loadingMessage = "Loading recipe data...")
         }
     }
 }
@@ -305,7 +328,16 @@ fun DietRangeItem(
 }
 
 @Composable
-fun DietRangeList() {
+fun DietParametersSection(
+    onStartLoading: () -> Unit,
+    onMessageUpdate: (String) -> Unit,
+    onStopLoading: () -> Unit
+) {
+    var showError by rememberSaveable { mutableStateOf(false) }
+    var expandedItem by rememberSaveable { mutableStateOf<String?>(null) }
+
+    val scope = rememberCoroutineScope()
+
     val nutrientRanges = remember {
         mutableStateMapOf<String, Pair<Int, Int>>().apply {
             dietStepperValues.forEach {
@@ -320,8 +352,6 @@ fun DietRangeList() {
             }
         }
     }
-
-    var expandedItem by rememberSaveable { mutableStateOf<String?>(null) }
 
     val selectedFilters = remember {
         mutableStateMapOf<String, Boolean>().apply {
@@ -357,15 +387,49 @@ fun DietRangeList() {
             showCheckbox = !isSingleField,
             alwaysEnabled = isSingleField
         )
+
+        Spacer(modifier = Modifier.height(4.dp))
     }
 
-    buildNutrientQueryParams(selectedFilters, nutrientRanges)
+    Spacer(modifier = Modifier.height(12.dp))
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        StyledDarkerButton(
+            onClick = {
+                if(validateFields(selectedFilters)) {
+                    onStartLoading()
+
+                    scope.launch {
+                        delay(2000)
+                        onMessageUpdate("Let the app cook...")
+                        delay(3000)
+
+                        // Acá va tu request o navegación
+                        onStopLoading()
+                    }
+                } else {
+                    showError = true
+                }
+            },
+            text = "Start Search"
+        )
+    }
+
+    if (showError) {
+        ShowErrorAlert(
+            onDismiss = { showError = false }
+        )
+    }
 }
 
 fun buildNutrientQueryParams(
     selectedFilters: Map<String, Boolean>,
     nutrientRanges: Map<String, Pair<Int, Int>>
-): Map<String, String> {
+): String {
     val query = mutableMapOf<String, String>()
 
     selectedFilters.forEach { (nutrient, isSelected) ->
@@ -382,6 +446,29 @@ fun buildNutrientQueryParams(
             }
         }
     }
-    Log.d("Query: ", query.toString())
-    return query
+
+    return query.entries.joinToString("&") { "${it.key}=${it.value}" }
+}
+
+private fun validateFields(
+    selectedFilters: Map<String, Boolean>,
+): Boolean {
+    return selectedFilters.any { it.value }
+}
+
+@Composable
+private fun ShowErrorAlert(onDismiss: () -> Unit) {
+    GenericAlertDialog(
+        title = "Error",
+        message = "You need to select at least one filter to search for recipes",
+        icon = Icons.Default.Warning,
+        dismissText = "Close",
+        onDismiss = onDismiss,
+        dismissOnBackPress = false,
+        dismissOnClickOutside = false
+    )
+}
+
+private fun navigateToSearchResultScreen(){
+
 }

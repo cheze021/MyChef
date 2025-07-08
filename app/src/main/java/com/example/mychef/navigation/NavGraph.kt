@@ -50,7 +50,7 @@ fun NavGraph(
 
             // route : search
             composable("search") {
-                SearchScreen()
+                SearchScreen(navController = navController)
             }
 
             // route : cart

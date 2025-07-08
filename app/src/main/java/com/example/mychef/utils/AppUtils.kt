@@ -34,13 +34,13 @@ fun GenericAlertDialog(
     title: String,
     message: String,
     icon: ImageVector,
-    confirmText: String,
-    dismissText: String,
+    confirmText: String? = null,
+    dismissText: String? = null,
     onConfirm: () -> Unit = {},
     onDismiss: () -> Unit = {},
     dismissOnBackPress: Boolean = true,
     dismissOnClickOutside: Boolean = true,
-    isFavorite: Boolean
+    isFavorite: Boolean? = null
 ) {
     AlertDialog(
         shape = RoundedCornerShape(24.dp),
@@ -56,7 +56,7 @@ fun GenericAlertDialog(
                 Icon(
                     icon,
                     contentDescription = null,
-                    tint = if(isFavorite) Color(0xFF4CAF50) else Color(0xFFE57373),
+                    tint = if(isFavorite == true) Color(0xFF4CAF50) else Color(0xFFE57373),
                     modifier = Modifier.size(48.dp)
                 )
 
@@ -83,10 +83,10 @@ fun GenericAlertDialog(
             }
         },
         dismissButton = {
-            StyledDarkerButton(onDismiss, dismissText)
+            StyledDarkerButton(onDismiss, dismissText.toString())
         },
         confirmButton = {
-            if(isFavorite) StyledLightButton(onConfirm, confirmText)
+            if(isFavorite == true) StyledLightButton(onConfirm, confirmText.toString())
         },
         properties = DialogProperties(
             dismissOnBackPress = dismissOnBackPress,

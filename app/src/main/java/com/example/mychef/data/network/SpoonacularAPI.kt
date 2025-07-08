@@ -43,7 +43,7 @@ interface SpoonacularApi {
         @Query("apiKey") apiKey: String
     ): NutritionInfoDto
 
-    @GET("recipes/findByNutrients")
+    @GET("recipes/findByNutrients?")
     suspend fun getRecipeByNutrients(
         @QueryMap filters: Map<String, String>,
         @Query("apiKey") apiKey: String

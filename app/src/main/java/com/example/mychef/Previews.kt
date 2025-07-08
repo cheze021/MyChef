@@ -77,5 +77,8 @@ fun RecipeNutritionScreenPreview() {
 @Preview
 @Composable
 fun SearchScreenPreview() {
-    SearchScreen()
+    val navController = rememberNavController()
+    SearchScreen(
+        navController = navController
+    )
 }
